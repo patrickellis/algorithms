@@ -26,7 +26,6 @@ Glossary
         - Permutation in String
   - Intervals
 
-
 ## Array
 
 
@@ -357,6 +356,8 @@ def slidingWindow(s: str, t: str) -> list[int]:
     return res
 ```
 
+<details>
+<summary>Show examples</summary>
 
 ###### [Minimum Window Substring](https://leetcode.com/problems/minimum-window-substring/)
 
@@ -412,3 +413,5 @@ def checkInclusion(self, s1: str, s2: str) -> bool:
         r += 1
     return False
 ```
+
+</details>
