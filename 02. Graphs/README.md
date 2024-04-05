@@ -16,41 +16,91 @@
 > Time: O(V+E) V: vertex count, E: edge count  
 > Space O(V+E)  
 
-### Iterative
+### Iterative DFS
 
 ```Python
-g = [] # Adjacency list representing graph
-n = len(g) # Number of nodes in the graph
+adj = [] # Adjacency list representing graph
+n = len(adj) # Number of vs in the graph
 
 def dfs(at: int):
     stack = [at]
     visited = [False]*n
 
     while stack:
-        node = stack.pop()
-        visited.add(node)
-        neighbours = g[node]
-
-        for next in neighbours:
-            if next not in visited:
+        v = stack.pop()
+        visited[v] = True
+        for next in adj[v]:
+            if !visited[next]:
                 stack.append(next)
 ```
 
-### Recursive
+### Recursive DFS
 
 ```Python
-g = [] # Adjacency list representing graph
-n = len(g) # Number of nodes in the graph
+adj = [] # Adjacency list representing graph
+n = len(adj) # Number of vs in the graph
 visited = [False]*n
 
-def dfs(node, visited: set):
-    if visited[node]: return
-    visited[node] = True
-    neighbours = g[node]
+def dfs(v):
+    visited[v] = True
 
-    for next in neighbours:
-        dfs(next)
+    for next in adj[v]:
+        if !visited[next]:
+            dfs(next)
 ```
+
+It can be useful to compute the entry and exit times and vertex color.
+These changes are required:
+
+```diff
+adj = [] # Adjacency list representing graph
+n = len(adj) # Number of vs in the graph
+- visited = [False]*n
++ timer = 0
++ time_in = [None]*n
++ time_out = [None]*n
++ color = [0]*n # 0=unvisited, 1=visited, 2=exited
+
+def dfs(v):
+-   visited[v] = True
++   time_in[v] = timer
++   timer += 1
++   color[v] = 1
+
+    for next in adj[v]:
++       if color[next] == 0:
+-       if !visited[next]:
+            dfs(next)
++   color[v] = 2
++   time_out[v] = timer
++   timer += 1
+```
+
+<details>
+<summary>Click for the non-diff version with Python syntax highlighting.</summary>
+
+```Python
+adj = [] # Adjacency list representing graph
+n = len(adj) # Number of vs in the graph
+timer = 0
+time_in = [None]*n
+time_out = [None]*n
+color = [0]*n # 0=unvisited, 1=visited, 2=exited
+
+def dfs(v):
+    time_in[v] = timer
+    timer += 1
+    color[v] = 1
+
+    for next in adj[v]:
+        if color[next] == 0:
+            dfs(next)
+    color[v] = 2
+    time_out[v] = timer
+    timer += 1
+```
+
+</details>
 
 ## Breadth First Search
 
@@ -63,8 +113,8 @@ def dfs(node, visited: set):
 ```Python
 from collections import deque
 
-g = [] # Adjacency list representing graph
-n = len(g) # Number of nodes in the graph
+adj = [] # Adjacency list representing graph
+n = len(adj) # Number of vs in the graph
 
 def reconstructPath(s: int, e: int, prev: list[int]):
     path = []
@@ -86,19 +136,16 @@ def solve(at: int):
     prev = [None]*n
 
     while queue:
-        node = queue.popleft()
-        visited[node] = True
-        neighbours = g[node]
-
-        for next in neighbours:
+        v = queue.popleft()
+        visited[v] = True
+        for next in adj[v]:
             if !visited[next]:
                 queue.append(next)
-                prev[next] = node
+                prev[next] = v
     return prev
 
 def bfs(s: int, e: int):
-    prev = solve(s) # Do a BFS starting at node s
-
+    prev = solve(s) # Do a BFS starting at v s
     return reconstructPath(s, e, prev) # return reconstructed path from s->e
 ```
 
@@ -117,8 +164,8 @@ move_count = 0
 queue = deque([s])
 visited = set()
 
-def explore_neighbours(node: tuple[int,int]):
-    r,c = node
+def explore_neighbours(v: tuple[int,int]):
+    r,c = v
     for d in directions:
         rr = r+d[0]
         cc = c+d[1]
@@ -136,14 +183,14 @@ def explore_neighbours(node: tuple[int,int]):
 
 def solve(s: tuple[int,int], e: tuple[int,int]):
     while queue:
-        node = queue.popleft()
-        visited.add(node)
+        v = queue.popleft()
+        visited.add(v)
 
-        if node == e:
+        if v == e:
             reached_end = True
             break
 
-        explore_neighbours(node)
+        explore_neighbours(v)
         nodes_left_in_layer -= 1
 
         if nodes_left_in_layer == 0:
@@ -172,8 +219,8 @@ bfs((0,0),(15,12))
 ```Python
 from collections import deque
 
-g = [] # Adjacency list representing graph
-n = len(g) # Number of nodes in the graph
+adj = [] # Adjacency list representing graph
+n = len(adj) # Number of vs in the graph
 
 def reconstructPath(s: int, e: int, prev: list[int]):
     path = []
@@ -193,21 +240,20 @@ def solve(queue: deque, visited: list[Bool], prev: list[int]):
     if not queue:
         return
 
-    node = queue.popleft()
-    visited[node] = True
-    neighbours = g[node]
+    v = queue.popleft()
+    visited[v] = True
 
-    for next in neighbours:
+    for next in adj[v]:
         if !visited[next]:
             queue.append(next)
-            prev[next] = node
+            prev[next] = v
 
 def bfs(s: int, e: int):
     queue = deque([s])
     visited = [False]*n
     prev = [None]*n
 
-    solve(queue, visited, prev) # Do a BFS starting at node s
+    solve(queue, visited, prev) # Do a BFS starting at v s
 
     return reconstructPath(s, e, prev) # return reconstructed path from s->e
 
