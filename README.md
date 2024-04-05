@@ -1,7 +1,8 @@
 # Data Structures and Algorithms
 
-## Glossary
+## Table of Contents
 
 - [Arrays](01.%20Arrays)
-- [Graphs](02.%20Graphs)
-- [Trees](03.%20Trees)
+- [Strings](02.%20Strings)
+- [Graphs](03.%20Graphs)
+- [Trees](04.%20Trees)

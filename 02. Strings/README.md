@@ -157,9 +157,15 @@ def prefix_function(s: str):
 
 ## Trie/Prefix Tree
 
+> [!WARNING]
+> Out of scope.
+
 - [Wikipedia](https://en.wikipedia.org/wiki/Trie)
 
 ## Suffix Tree
+
+> [!WARNING]
+> Out of scope.
 
 - [Reference](https://favtutor.com/blogs/ukkonen-algorithm-suffix-tree)
 - [Wikipedia](https://en.wikipedia.org/wiki/Suffix_tree)

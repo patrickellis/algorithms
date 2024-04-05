@@ -31,7 +31,7 @@ def binary_search(array) -> int:
     return left
 ```
 
-##Two Pointers
+## Two Pointers
 
 ### Cycle Detection
 
