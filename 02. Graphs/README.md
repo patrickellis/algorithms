@@ -4,6 +4,7 @@
 
 - [Depth First Search](#depth-first-search)
   - [Iterative](#dfs-iterative)
+    - [Iterative: Shortest path with Matrix Input](#iterative-shortest-path-with-matrix-input)
   - [Recursive](#dfs-recursive)
 - [Breadth First Search](#breadth-first-search)
   - [Iterative](#bfs-iterative)
@@ -101,6 +102,66 @@ def bfs(s: int, e: int):
     return reconstructPath(s, e, prev) # return reconstructed path from s->e
 ```
 
+#### Iterative: Shortest path with Matrix Input
+
+Watch the accompanying video [here](https://www.youtube.com/watch?v=KiCBXu4P-2Y&list=PLDV1Zeh2NRsDGO4--qE8yH72HFL1Km93P&index=6).
+
+```Python
+m = [] # Input matrix of size R x C
+R, C = len(m), len(m[0])
+directions = ((0,1),(0,-1),(1,0),(-1,0))
+reached_end = False
+nodes_left_in_layer = 0
+nodes_in_next_layer = 0
+move_count = 0
+queue = deque([s])
+visited = set()
+
+def explore_neighbours(node: tuple[int,int]):
+    r,c = node
+    for d in directions:
+        rr = r+d[0]
+        cc = c+d[1]
+
+        # Skip out of bounds
+        if rr < 0 or cc < 0: continue
+        if rr >= R  or cc >= C: continue
+
+        # Skip visited / blocked cells
+        if (rr,cc) in visited: continue
+        if m[rr][cc] == '#': continue
+
+        queue.append((rr,cc))
+        nodes_in_next_layer += 1
+
+def solve(s: tuple[int,int], e: tuple[int,int]):
+    while queue:
+        node = queue.popleft()
+        visited.add(node)
+
+        if node == e:
+            reached_end = True
+            break
+
+        explore_neighbours(node)
+        nodes_left_in_layer -= 1
+
+        if nodes_left_in_layer == 0:
+            nodes_left_in_layer = nodes_in_next_layer
+            nodes_in_next_layer = 0
+            move_count += 1
+
+        if reached_end:
+            return move_count
+
+    return -1
+
+def bfs(s: tuple(int,int), e: tuple(int,int)):
+    return solve(s,e) 
+
+bfs((0,0),(15,12))
+```
+
 ### Recursive
 
 - Uncommon
@@ -146,7 +207,7 @@ def bfs(s: int, e: int):
     visited = [False]*n
     prev = [None]*n
 
-    solve(s) # Do a BFS starting at node s
+    solve(queue, visited, prev) # Do a BFS starting at node s
 
     return reconstructPath(s, e, prev) # return reconstructed path from s->e
 
