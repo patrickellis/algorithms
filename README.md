@@ -7,4 +7,3 @@
 - [Graphs](03.%20Graphs)
 - [Trees](04.%20Trees)
 
-## Change
