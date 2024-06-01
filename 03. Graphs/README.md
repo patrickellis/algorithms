@@ -18,6 +18,8 @@
 > Time: O(V+E) V: vertex count, E: edge count  
 > Space O(V+E)  
 
+- [VIDEO](https://www.youtube.com/watch?v=7fujbpJ0LB4&list=PLDV1Zeh2NRsDGO4--qE8yH72HFL1Km93P&index=4)
+
 ### Iterative DFS
 
 ```Python
@@ -109,6 +111,8 @@ def dfs(v):
 > [!NOTE]  
 > Time: O(V+E) V: vertex count, E: edge count  
 > Space O(V)  
+
+- [VIDEO](https://www.youtube.com/watch?v=oDqjPvD54Ss&list=PLDV1Zeh2NRsDGO4--qE8yH72HFL1Km93P&index=5)
 
 ### Iterative
 
@@ -325,6 +329,9 @@ def topological_sort():
 
 - [Reference](https://cp-algorithms.com/graph/dijkstra.html)
 
+# TODO(Patrick): Add a priority queue in place of this line in the Dijkstras implementation below:
+#            if (!u[j] and (v == -1 or dist[j] < dist[v])):
+
 
 1. Create an array $dist[]$ where for each vertex $v$ we store the current lenth of the shortest path from $s$ to $v$ in $dist[v]$.
 2. Initially, $dist[s] = 0$, and for all other vertices this length equals infinity.
@@ -411,7 +418,9 @@ $$O(n^2+m)$$
 - Not preferred over Dijkstra, because time complexity is O(VE).
 - Run this algorithm a second time if a negative cycle check is required. If the shortest distance of a vertex is reduced, then the graph has a negative cycle.
 
-##### Edge List (fast and optimized) - O(VE)
+<details>
+
+<summary> Edge List (fast and optimized) - O(VE) </summary>
 
 - [Code Source](https://github.com/williamfiset/Algorithms/blob/master/src/main/java/com/williamfiset/algorithms/graphtheory/BellmanFordEdgeList.java)
 
@@ -488,12 +497,16 @@ if __name__ == "__main__":
     # The cost to get from node 0 to 8 is Infinity
 
 ```
+</details>
 
-##### Adjacency List - O(VE)
+
+<details>
+
+<summary>Adjacency List - O(VE)</summary>
 
 - [Code Source](https://github.com/williamfiset/Algorithms/blob/master/src/main/java/com/williamfiset/algorithms/graphtheory/BellmanFordAdjacencyMatrix.java).
 
-```
+```Python
 class Edge:
     def __init__(self, from_node, to_node, cost):
         self.from_node = from_node
@@ -558,6 +571,7 @@ if __name__ == "__main__":
     # The cost to get from node 0 to 8 is Infinity
 ```
 
+</details>
 
 ##### Adjacency Matrix - O(V^3)
 
@@ -1071,6 +1085,220 @@ if __name__ == "__main__":
         print(f"Nodes: {scc} form a Strongly Connected Component.")
 ```
 
+##  Kosaraju
+
+<details>
+<summary>Click to view implementation.</summary>
+
+
+```Python
+from collections import defaultdict, deque
+
+class Kosaraju:
+    """
+    Implementation of Kosaraju's SCC algorithm
+
+    Verified against:
+    - https://open.kattis.com/problems/equivalences
+    - https://open.kattis.com/problems/runningmom
+    """
+
+    def __init__(self, graph):
+        if graph is None:
+            raise ValueError("Graph cannot be null.")
+        self.graph = graph
+        self.n = len(graph)
+        self.sccCount = 0
+        self.solved = False
+        self.sccs = [-1] * self.n
+        self.visited = [False] * self.n
+        self.postOrderTraversal = []
+
+    # Returns the number of strongly connected components in the graph.
+    def scc_count(self):
+        if not self.solved:
+            self.solve()
+        return self.sccCount
+
+    # Get the connected components of this graph. If two indexes
+    # have the same value then they're in the same SCC.
+    def get_sccs(self):
+        if not self.solved:
+            self.solve()
+        return self.sccs
+
+    def solve(self):
+        self.sccCount = 0
+        self.visited = [False] * self.n
+        self.postOrderTraversal = []
+
+        for i in range(self.n):
+            self.dfs1(i)
+
+        self.visited = [False] * self.n
+        self.create_transpose_graph()
+
+        # Reverse the post order traversal to make iterating through it
+        # in the next step more intuitive.
+        self.postOrderTraversal.reverse()
+
+        for node in self.postOrderTraversal:
+            if not self.visited[node]:
+                self.dfs2(node)
+                self.sccCount += 1
+
+        self.solved = True
+
+    # Traverse the original graph and add nodes to the post order traversal on the callback.
+    def dfs1(self, from_node):
+        if self.visited[from_node]:
+            return
+        self.visited[from_node] = True
+        for to_node in self.graph[from_node]:
+            self.dfs1(to_node)
+        self.postOrderTraversal.append(from_node)
+
+    # Traverse the transpose graph and label all the encountered nodes as part of the same SCC.
+    def dfs2(self, from_node):
+        if self.visited[from_node]:
+            return
+        self.visited[from_node] = True
+        for to_node in self.transposeGraph[from_node]:
+            self.dfs2(to_node)
+        self.sccs[from_node] = self.sccCount
+
+    def create_transpose_graph(self):
+        self.transposeGraph = Kosaraju.create_graph(self.n)
+        for u in range(self.n):
+            for v in self.graph[u]:
+                Kosaraju.add_edge(self.transposeGraph, v, u)
+
+    # Initializes adjacency list with n nodes.
+    @staticmethod
+    def create_graph(n):
+        return [[] for _ in range(n)]
+
+    # Adds a directed edge from node 'from' to node 'to'
+    @staticmethod
+    def add_edge(graph, from_node, to_node):
+        graph[from_node].append(to_node)
+
+def example_from_cp4():
+    n = 8
+    graph = Kosaraju.create_graph(n)
+
+    Kosaraju.add_edge(graph, 0, 1)
+    Kosaraju.add_edge(graph, 1, 3)
+    Kosaraju.add_edge(graph, 2, 1)
+    Kosaraju.add_edge(graph, 3, 2)
+    Kosaraju.add_edge(graph, 3, 4)
+    Kosaraju.add_edge(graph, 4, 5)
+    Kosaraju.add_edge(graph, 5, 7)
+    Kosaraju.add_edge(graph, 6, 4)
+    Kosaraju.add_edge(graph, 7, 6)
+
+    run_kosaraju(graph)
+
+def example4():
+    n = 8
+    graph = Kosaraju.create_graph(n)
+
+    Kosaraju.add_edge(graph, 0, 2)
+    Kosaraju.add_edge(graph, 0, 3)
+    Kosaraju.add_edge(graph, 0, 5)
+    Kosaraju.add_edge(graph, 1, 4)
+    Kosaraju.add_edge(graph, 1, 7)
+    Kosaraju.add_edge(graph, 2, 1)
+    Kosaraju.add_edge(graph, 3, 0)
+    Kosaraju.add_edge(graph, 3, 4)
+    Kosaraju.add_edge(graph, 4, 2)
+    Kosaraju.add_edge(graph, 5, 7)
+    Kosaraju.add_edge(graph, 6, 5)
+    Kosaraju.add_edge(graph, 7, 6)
+
+    run_kosaraju(graph)
+
+def example3():
+    n = 6
+    graph = Kosaraju.create_graph(n)
+
+    Kosaraju.add_edge(graph, 0, 2)
+    Kosaraju.add_edge(graph, 0, 5)
+    Kosaraju.add_edge(graph, 1, 0)
+    Kosaraju.add_edge(graph, 1, 3)
+    Kosaraju.add_edge(graph, 2, 4)
+    Kosaraju.add_edge(graph, 3, 1)
+    Kosaraju.add_edge(graph, 3, 5)
+    Kosaraju.add_edge(graph, 4, 0)
+
+    run_kosaraju(graph)
+
+def example2():
+    n = 10
+    graph = Kosaraju.create_graph(n)
+
+    Kosaraju.add_edge(graph, 0, 1)
+    Kosaraju.add_edge(graph, 1, 2)
+    Kosaraju.add_edge(graph, 1, 6)
+    Kosaraju.add_edge(graph, 2, 3)
+    Kosaraju.add_edge(graph, 3, 4)
+    Kosaraju.add_edge(graph, 3, 7)
+    Kosaraju.add_edge(graph, 4, 5)
+    Kosaraju.add_edge(graph, 5, 9)
+    Kosaraju.add_edge(graph, 6, 1)
+    Kosaraju.add_edge(graph, 7, 2)
+    Kosaraju.add_edge(graph, 8, 4)
+    Kosaraju.add_edge(graph, 9, 8)
+
+    run_kosaraju(graph)
+
+def example1():
+    n = 8
+    graph = Kosaraju.create_graph(n)
+
+    Kosaraju.add_edge(graph, 6, 0)
+    Kosaraju.add_edge(graph, 6, 2)
+    Kosaraju.add_edge(graph, 3, 4)
+    Kosaraju.add_edge(graph, 6, 4)
+    Kosaraju.add_edge(graph, 2, 0)
+    Kosaraju.add_edge(graph, 0, 1)
+    Kosaraju.add_edge(graph, 4, 5)
+    Kosaraju.add_edge(graph, 5, 6)
+    Kosaraju.add_edge(graph, 3, 7)
+    Kosaraju.add_edge(graph, 7, 5)
+    Kosaraju.add_edge(graph, 1, 2)
+    Kosaraju.add_edge(graph, 7, 3)
+    Kosaraju.add_edge(graph, 5, 0)
+
+    # Prints:
+    # Number of Strongly Connected Components: 3
+    # Nodes: [3, 7] form a Strongly Connected Component.
+    # Nodes: [4, 5, 6] form a Strongly Connected Component.
+    # Nodes: [0, 1, 2] form a Strongly Connected Component.
+    run_kosaraju(graph)
+
+def run_kosaraju(graph):
+    n = len(graph)
+    solver = Kosaraju(graph)
+    sccs = solver.get_sccs()
+    multimap = defaultdict(list)
+    for i in range(n):
+        multimap[sccs[i]].append(i)
+
+    print(f"Number of Strongly Connected Components: {solver.scc_count()}")
+    for scc in multimap.values():
+        print(f"Nodes: {scc} form a Strongly Connected Component.")
+
+if __name__ == "__main__":
+    example1()
+    example2()
+    example3()
+    example4()
+    example_from_cp4()
+```
+
+</details>
+
 ## Minimum Spanning Tree
 
 ### Prim's Algorithm
@@ -1391,6 +1619,10 @@ print(uf.components())  # Output: 8
 ```
 
 ## Travelling Salesman
+
+- [VIDEO 1](https://www.youtube.com/watch?v=cY4HiiFHO1o&list=PLDV1Zeh2NRsDGO4--qE8yH72HFL1Km93P&index=25)
+- [VIDEO 2](https://www.youtube.com/watch?v=udEe7Cv3DqU&list=PLDV1Zeh2NRsDGO4--qE8yH72HFL1Km93P&index=26)
+
 
 ### Brute Force - O(N^3)
 
@@ -1816,6 +2048,137 @@ if __name__ == "__main__":
 ```
 
 </details>
+
+## Eulerian Paths and Circuits
+
+- [VIDEO](https://www.youtube.com/watch?v=xR4sGgwtR2I&list=PLDV1Zeh2NRsDGO4--qE8yH72HFL1Km93P&index=27)
+
+```Python
+
+from collections import deque
+
+class EulerianPathDirectedEdgesAdjacencyList:
+    """
+    Implementation of finding an Eulerian Path on a graph. This implementation verifies that the
+    input graph is fully connected and supports self-loops and repeated edges between nodes.
+
+    Time Complexity: O(E)
+    """
+
+    def __init__(self, graph):
+        if graph is None:
+            raise ValueError("Graph cannot be null")
+        self.n = len(graph)
+        self.graph = graph
+        self.path = deque()
+
+    # Returns a list of edge_count + 1 node ids that give the Eulerian path or
+    # None if no path exists or the graph is disconnected.
+    def get_eulerian_path(self):
+        self.set_up()
+
+        if not self.graph_has_eulerian_path():
+            return None
+        self.dfs(self.find_start_node())
+
+        # Make sure all edges of the graph were traversed. It could be the
+        # case that the graph is disconnected in which case return None.
+        if len(self.path) != self.edge_count + 1:
+            return None
+
+        # Instead of returning the 'path' as a linked list return
+        # the solution as a primitive list for convenience.
+        return list(self.path)
+
+    def set_up(self):
+        # Arrays that track the in-degree and out-degree of each node.
+        self.in_degree = [0] * self.n
+        self.out_degree = [0] * self.n
+        self.edge_count = 0
+
+        # Compute in and out node degrees.
+        for from_node in range(self.n):
+            for to_node in self.graph[from_node]:
+                self.in_degree[to_node] += 1
+                self.out_degree[from_node] += 1
+                self.edge_count += 1
+
+    def graph_has_eulerian_path(self):
+        if self.edge_count == 0:
+            return False
+        start_nodes = 0
+        end_nodes = 0
+        for i in range(self.n):
+            if self.out_degree[i] - self.in_degree[i] > 1 or self.in_degree[i] - self.out_degree[i] > 1:
+                return False
+            elif self.out_degree[i] - self.in_degree[i] == 1:
+                start_nodes += 1
+            elif self.in_degree[i] - self.out_degree[i] == 1:
+                end_nodes += 1
+        return (end_nodes == 0 and start_nodes == 0) or (end_nodes == 1 and start_nodes == 1)
+
+    def find_start_node(self):
+        start = 0
+        for i in range(self.n):
+            # Unique starting node.
+            if self.out_degree[i] - self.in_degree[i] == 1:
+                return i
+            # Start at a node with an outgoing edge.
+            if self.out_degree[i] > 0:
+                start = i
+        return start
+
+    # Perform DFS to find Eulerian path.
+    def dfs(self, at):
+        while self.out_degree[at] != 0:
+            next_node = self.graph[at][self.out_degree[at] - 1]
+            self.out_degree[at] -= 1
+            self.dfs(next_node)
+        self.path.appendleft(at)
+
+    @staticmethod
+    def initialize_empty_graph(n):
+        return [[] for _ in range(n)]
+
+    @staticmethod
+    def add_directed_edge(graph, from_node, to_node):
+        graph[from_node].append(to_node)
+
+def example_from_slides():
+    n = 7
+    graph = EulerianPathDirectedEdgesAdjacencyList.initialize_empty_graph(n)
+
+    edges = [
+        (1, 2), (1, 3), (2, 2), (2, 4), (2, 4),
+        (3, 1), (3, 2), (3, 5), (4, 3), (4, 6),
+        (5, 6), (6, 3)
+    ]
+    for from_node, to_node in edges:
+        EulerianPathDirectedEdgesAdjacencyList.add_directed_edge(graph, from_node, to_node)
+
+    solver = EulerianPathDirectedEdgesAdjacencyList(graph)
+    # Outputs path: [1, 3, 5, 6, 3, 2, 4, 3, 1, 2, 2, 4, 6]
+    print(solver.get_eulerian_path())
+
+def small_example():
+    n = 5
+    graph = EulerianPathDirectedEdgesAdjacencyList.initialize_empty_graph(n)
+
+    edges = [
+        (0, 1), (1, 2), (1, 4), (1, 3), (2, 1), (4, 1)
+    ]
+    for from_node, to_node in edges:
+        EulerianPathDirectedEdgesAdjacencyList.add_directed_edge(graph, from_node, to_node)
+
+    solver = EulerianPathDirectedEdgesAdjacencyList(graph)
+    # Outputs path: [0, 1, 4, 1, 2, 1, 3]
+    print(solver.get_eulerian_path())
+
+if __name__ == "__main__":
+    example_from_slides()
+    small_example()
+```
+
 
 - Checking for a cycle in a graph:
     - __Directed__: Use color array with values [0,1,2].
