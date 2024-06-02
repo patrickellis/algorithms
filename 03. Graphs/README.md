@@ -329,8 +329,7 @@ def topological_sort():
 
 - [Reference](https://cp-algorithms.com/graph/dijkstra.html)
 
-# TODO(Patrick): Add a priority queue in place of this line in the Dijkstras implementation below:
-#            if (!u[j] and (v == -1 or dist[j] < dist[v])):
+# TODO(Patrick): Update these steps to reflect the code below.
 
 
 1. Create an array $dist[]$ where for each vertex $v$ we store the current lenth of the shortest path from $s$ to $v$ in $dist[v]$.
@@ -350,31 +349,45 @@ $$d[to]=\min(d[to],d[v]+len)$$
    The values $d[v]$ are the lengths of shortest paths from $s$ to all vertices $v$.
 
 ```Python
-adj = [] # Adjacency list representing graph
-n = len(adj) # Number of nodes in the graph
-visited = [False]*n
-dist = [float('inf')]*n
-p = [-1]*n # predecessors
+import heapq
+
+# Adjacency list representing the graph
+adj = [
+    [(1, 2), (2, 4)],   # edges from node 0 to node 1 with weight 2, and to node 2 with weight 4
+    [(2, 1), (3, 7)],   # edges from node 1 to node 2 with weight 1, and to node 3 with weight 7
+    [(3, 3)],           # edge from node 2 to node 3 with weight 3
+    []                  # node 3 has no outgoing edges
+]
+
+n = len(adj)  # Number of nodes in the graph
+dist = [float('inf')] * n  # Distance from source to each node
+p = [-1] * n  # Predecessors
+visited = [False] * n  # Visited nodes
 
 def dijkstra(s):
-    u = [False]*n
     dist[s] = 0
-    
-    for i in range(n):
-        v = -1
-        for j in range(n):
-            if (!u[j] and (v == -1 or dist[j] < dist[v])):
-                v = j
+    pq = [(0, s)]  # Priority queue of (distance, node)
 
-        if dist[v] == float('inf'):
-            break
+    while pq:
+        d, v = heapq.heappop(pq)
+        
+        if visited[v]:
+            continue
 
-        u[v] = True
-        for edge in adj[v]:
-            to, len = edge
-            if dist[v] + len < dist[to]:
-                dist[to] = dist[v]+len
+        visited[v] = True
+        
+        for to, length in adj[v]:
+            if dist[v] + length < dist[to]:
+                dist[to] = dist[v] + length
                 p[to] = v
+                heapq.heappush(pq, (dist[to], to))
+
+# Example usage
+source = 0
+dijkstra(source)
+
+print("Distances from source:", dist)
+print("Predecessors:", p)
 ```
 
 #### Restoring Shortest Paths
