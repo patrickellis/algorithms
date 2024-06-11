@@ -1954,113 +1954,6 @@ if __name__ == "__main__":
 
 </details>
 
-## Find Articulation Points
-
-<details>
-
-<summary>Click to view code</summary>
-
-
-```Python
-from typing import List
-
-class ArticulationPointsAdjacencyList:
-    def __init__(self, graph: List[List[int]], n: int):
-        if graph is None or n <= 0 or len(graph) != n:
-            raise ValueError("Invalid graph or number of nodes.")
-        self.graph = graph
-        self.n = n
-        self.solved = False
-        self.id = 0
-        self.rootNodeOutcomingEdgeCount = 0
-        self.low = [0] * n
-        self.ids = [0] * n
-        self.visited = [False] * n
-        self.isArticulationPoint = [False] * n
-
-    def find_articulation_points(self) -> List[bool]:
-        if self.solved:
-            return self.isArticulationPoint
-
-        for i in range(self.n):
-            if not self.visited[i]:
-                self.rootNodeOutcomingEdgeCount = 0
-                self.dfs(i, i, -1)
-                self.isArticulationPoint[i] = (self.rootNodeOutcomingEdgeCount > 1)
-
-        self.solved = True
-        return self.isArticulationPoint
-
-    def dfs(self, root: int, at: int, parent: int):
-        if parent == root:
-            self.rootNodeOutcomingEdgeCount += 1
-
-        self.visited[at] = True
-        self.low[at] = self.ids[at] = self.id
-        self.id += 1
-
-        for to in self.graph[at]:
-            if to == parent:
-                continue
-            if not self.visited[to]:
-                self.dfs(root, to, at)
-                self.low[at] = min(self.low[at], self.low[to])
-                if self.ids[at] <= self.low[to]:
-                    self.isArticulationPoint[at] = True
-            else:
-                self.low[at] = min(self.low[at], self.ids[to])
-
-def create_graph(n: int) -> List[List[int]]:
-    return [[] for _ in range(n)]
-
-def add_edge(graph: List[List[int]], frm: int, to: int):
-    graph[frm].append(to)
-    graph[to].append(frm)
-
-def main():
-    test_example2()
-
-def test_example1():
-    n = 9
-    graph = create_graph(n)
-
-    add_edge(graph, 0, 1)
-    add_edge(graph, 0, 2)
-    add_edge(graph, 1, 2)
-    add_edge(graph, 2, 3)
-    add_edge(graph, 3, 4)
-    add_edge(graph, 2, 5)
-    add_edge(graph, 5, 6)
-    add_edge(graph, 6, 7)
-    add_edge(graph, 7, 8)
-    add_edge(graph, 8, 5)
-
-    solver = ArticulationPointsAdjacencyList(graph, n)
-    is_articulation_point = solver.find_articulation_points()
-
-    for i in range(n):
-        if is_articulation_point[i]:
-            print(f"Node {i} is an articulation")
-
-def test_example2():
-    n = 3
-    graph = create_graph(n)
-
-    add_edge(graph, 0, 1)
-    add_edge(graph, 1, 2)
-
-    solver = ArticulationPointsAdjacencyList(graph, n)
-    is_articulation_point = solver.find_articulation_points()
-
-    for i in range(n):
-        if is_articulation_point[i]:
-            print(f"Node {i} is an articulation")
-
-if __name__ == "__main__":
-    main()
-```
-
-</details>
 
 ## Eulerian Paths and Circuits
 
@@ -2192,6 +2085,147 @@ if __name__ == "__main__":
     small_example()
 ```
 
+# Applications & Other Techniques
+
+## Check Cycle
+
+<details>
+
+<summary>Click to view code</summary>
+
+```Python
+def check_cycle():
+    adj = [] # Adjacency list representing graph
+    n = len(adj) # Number of nodes in the graph
+    visited = [False]*n
+    # To detect a back edge, track vertices currently in the recursion stack.
+    rec_stk = [False]*n
+    return any(
+        !visited[v] and dfs(adj, v, visited, rec_stk) for v in range(n)
+    )
+    
+def dfs(adj, v, visited: list[bool], rec_stk: list[bool]):
+    visited[v] = True
+    rec_stk[v] = True
+
+    for edge in adj[v]:
+        if !visited[edge]:
+            dfs(edge)
+        elif v in rec_stk:
+            return True
+    rec_stk[v] = False
+    return False
+```
+
+</details>
+
+## Find Articulation Points
+
+<details>
+
+<summary>Click to view code</summary>
+
+```Python
+
+from typing import List
+
+class ArticulationPointsFinder:
+    def __init__(self, graph: List[List[int]], num_nodes: int):
+        if graph is None or num_nodes <= 0 or len(graph) != num_nodes:
+            raise ValueError("Invalid graph or number of nodes.")
+        self.graph = graph
+        self.num_nodes = num_nodes
+        self.solved = False
+        self.current_id = 0
+        self.root_outgoing_edge_count = 0
+        self.low = [0] * num_nodes
+        self.ids = [0] * num_nodes
+        self.visited = [False] * num_nodes
+
+    def find_articulation_points(self) -> List[int]:
+        articulation_points = []
+        if self.solved:
+            return articulation_points
+
+        for node in range(self.num_nodes):
+            if not self.visited[node]:
+                self.root_outgoing_edge_count = 0
+                self.dfs(node, node, -1, articulation_points)
+                if self.root_outgoing_edge_count > 1:
+                    articulation_points.append(node)
+
+        self.solved = True
+        return articulation_points
+
+    def dfs(self, root: int, current: int, parent: int, articulation_points: List[int]):
+        if parent == root:
+            self.root_outgoing_edge_count += 1
+
+        self.visited[current] = True
+        self.low[current] = self.ids[current] = self.current_id
+        self.current_id += 1
+
+        for neighbor in self.graph[current]:
+            if neighbor == parent:
+                continue
+            if not self.visited[neighbor]:
+                self.dfs(root, neighbor, current, articulation_points)
+                self.low[current] = min(self.low[current], self.low[neighbor])
+                if self.ids[current] <= self.low[neighbor] and current != root:
+                    articulation_points.append(current)
+            else:
+                self.low[current] = min(self.low[current], self.ids[neighbor])
+
+def create_graph(num_nodes: int) -> List[List[int]]:
+    return [[] for _ in range(num_nodes)]
+
+def add_edge(graph: List[List[int]], from_node: int, to_node: int):
+    graph[from_node].append(to_node)
+    graph[to_node].append(from_node)
+
+def test_example1():
+    num_nodes = 9
+    graph = create_graph(num_nodes)
+
+    add_edge(graph, 0, 1)
+    add_edge(graph, 0, 2)
+    add_edge(graph, 1, 2)
+    add_edge(graph, 2, 3)
+    add_edge(graph, 3, 4)
+    add_edge(graph, 2, 5)
+    add_edge(graph, 5, 6)
+    add_edge(graph, 6, 7)
+    add_edge(graph, 7, 8)
+    add_edge(graph, 8, 5)
+
+    solver = ArticulationPointsFinder(graph, num_nodes)
+    articulation_points = solver.find_articulation_points()
+
+    for node in articulation_points:
+        print(f"Node {node} is an articulation point")
+
+def test_example2():
+    num_nodes = 3
+    graph = create_graph(num_nodes)
+
+    add_edge(graph, 0, 1)
+    add_edge(graph, 1, 2)
+
+    solver = ArticulationPointsFinder(graph, num_nodes)
+    articulation_points = solver.find_articulation_points()
+
+    for node in articulation_points:
+        print(f"Node {node} is an articulation point")
+
+def main():
+    test_example1()
+    test_example2()
+
+if __name__ == "__main__":
+    main()
+```
+
+</details>
 
 - Checking for a cycle in a graph:
     - __Directed__: Use color array with values [0,1,2].
