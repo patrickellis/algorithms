@@ -229,6 +229,15 @@ def level_order(root):
 
 **Examples:**
 
+```Python
+# Definition for a binary tree node.
+class TreeNode:
+    def __init__(self, x):
+        self.val = x
+        self.left = None
+        self.right = None
+```
+
 #### Count the number of nodes in a Binary Tree
 
 ```Python
@@ -239,7 +248,14 @@ sum(1 for _ in inorder(root))
 
 ```Python
 is_leaf = lambda x: not x.left and not x.right
-sum(1 for x in inorder(root) if is_leaf(x)))
+sum(1 for x in inorder(root) if is_leaf(x))
+```
+
+#### Sum of all leaf nodes
+
+```Python
+is_leaf = lambda x: not x.left and not x.right
+sum(x.val for x in inorder(root) if is_leaf(x))
 ```
 
 #### Verify that a Binary Tree is a Binary Search Tree
@@ -247,32 +263,69 @@ sum(1 for x in inorder(root) if is_leaf(x)))
 ```Python
 from itertools import pairwise
 is_ordered = lambda xs: all(a<=b for a,b in pairwise(xs))
-is_ordered(x.value for x in inorder(tree))
+is_ordered(x.val for x in inorder(tree))
 ```
 
 #### Flatten a Binary Search Tree into an Ordered List
 
 ```Python
-[x.value for x in inorder(tree)]
+[x.val for x in inorder(tree)]
 ```
 
 #### Find the kth-smallest element of Binary Search Tree
 
 ```Python
-next(x.value for i,x in enumerate(inorder(root)) if i == k-1)
+next(x.val for i,x in enumerate(inorder(root)) if i == k-1)
 ```
 
 #### Find the kth-largest element of Binary Search Tree
 
 ```Python
-next(x.value for i,x in enumerate(reverse_inorder(root)) if i == k-1)
+next(x.val for i,x in enumerate(reverse_inorder(root)) if i == k-1)
 ```
 
 #### Check if a Binary Tree is Symmetrical
 
 ```Python
 from itertools import zip_longest
-all(a.value == b.value for a,b in zip_longest(inorder(tree_a), reverse_inorder(tree_b)))
+all(a.val == b.val for a,b in zip_longest(inorder(tree_a), reverse_inorder(tree_b)))
 ```
 
-#### TODO: Height of Binary Tree
+#### Height of Binary Tree
+
+- [Video](https://www.youtube.com/watch?v=0qgaIMqOEVs&list=PLDV1Zeh2NRsDfGc8rbQ0_58oEZQVtvoIc&index=2)
+
+```Python
+def treeHeight(node: TreeNode) -> int:
+    # Base case: if the node is None, the height is -1
+    if not node:
+        return -1
+
+    # Recursively find the height of the left and right subtrees
+    left_height = treeHeight(node.left)
+    right_height = treeHeight(node.right)
+
+    # The height of the current node is the maximum of the heights of its subtrees, plus one
+    return max(left_height, right_height) + 1
+```
+
+#### Lowest Common Ancestor
+
+```Python
+class Solution:
+    def lowestCommonAncestor(self, root: 'TreeNode', p: 'TreeNode', q: 'TreeNode') -> 'TreeNode':
+        # Base case: if we reach the end of a branch or find either p or q
+        if not root or root == p or root == q:
+            return root
+
+        # Recursively search the left and right subtrees
+        left = self.lowestCommonAncestor(root.left, p, q)
+        right = self.lowestCommonAncestor(root.right, p, q)
+
+        # If both sides returned a non-null val, root is the LCA
+        if left and right:
+            return root
+
+        # Otherwise, return the non-null val from either the left or right subtree
+        return left if left else right
+```
