@@ -137,21 +137,27 @@ def reconstructPath(s: int, e: int, p: list[int]):
 
 def solve(at: int):
     queue = deque([at])
-    visited = [False]*n
-    prev = [None]*n
+    visited = set()
+    p = [None]*n
 
     while queue:
         v = queue.popleft()
-        visited[v] = True
+        visited.add(v)
         for edge in adj[v]:
-            if !visited[edge]:
+            if edge not in visited:
                 queue.append(edge)
                 p[edge] = v
     return p
 
 def bfs(s: int, e: int):
-    prev = solve(s) # Do a BFS starting at v s
-    return reconstructPath(s, e, p) # return reconstructed path from s->e
+    """Return reconstructed path from s->e.
+
+    s = start
+    e = end
+    p = previous
+   """
+    p = solve(s)
+    return reconstructPath(s, e, p)
 ```
 
 #### Iterative: Shortest path with Matrix Input
@@ -334,19 +340,19 @@ def topological_sort():
 
 1. Create an array $dist[]$ where for each vertex $v$ we store the current lenth of the shortest path from $s$ to $v$ in $dist[v]$.
 2. Initially, $dist[s] = 0$, and for all other vertices this length equals infinity.
-$$d[v]=∞,v\neq s$$
+$$dist[v]=∞,v\neq s$$
 3. In addition, maintain a Boolean array $u[]$ which stores for each vertex $v$ whether it's marked.  
    Initially all vertices are **unmarked**:
    $$u[v] = False, \forall v \in[0..n]$$   
    The main assertion on which Dijkstra's algorithm correctness is based is the following:  
-   **After any vertex $v$  becomes marked, the current distance to it $d[v]$  is the shortest, and will no longer change.**  
+   **After any vertex $v$  becomes marked, the current distance to it $dist[v]$  is the shortest, and will no longer change.**  
 4. The Dijkstra's algorithm runs for $n$ iterations.  
    At each iteration, it selects an unmarked vertex $v$ with the lowest value $dist[v]$.  
 5. $v$ is marked. 
-6. All of the edges of the form $(v,to)$ are checked, attempting to improve the value $d[to]$ for each vertex $to$.  
-$$d[to]=\min(d[to],d[v]+len)$$
+6. All of the edges of the form $(v,to)$ are checked, attempting to improve the value $dist[to]$ for each vertex $to$.  
+$$dist[to]=\min(dist[to],dist[v]+len)$$
 7. After $n$ iterations, all vertices will be marked, and the algorithm terminates.  
-   The values $d[v]$ are the lengths of shortest paths from $s$ to all vertices $v$.
+   The values $dist[v]$ are the lengths of shortest paths from $s$ to all vertices $v$.
 
 ```Python
 import heapq
@@ -369,7 +375,7 @@ def dijkstra(s):
     pq = [(0, s)]  # Priority queue of (distance, node)
 
     while pq:
-        d, v = heapq.heappop(pq)
+        _, v = heapq.heappop(pq)
         
         if visited[v]:
             continue
