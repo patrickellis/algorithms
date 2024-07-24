@@ -25,10 +25,10 @@
 ```Python
 adj = [] # Adjacency list representing graph
 n = len(adj) # Number of nodes in the graph
+visited = [False]*n
 
 def dfs(at: int):
     stack = [at]
-    visited = [False]*n
 
     while stack:
         v = stack.pop()
@@ -121,24 +121,21 @@ from collections import deque
 
 adj = [] # Adjacency list representing graph
 n = len(adj) # Number of nodes in the graph
-
+visited = set()
+p = [-1]*n
 
 def reconstructPath(s: int, e: int, p: list[int]):
     path = []
     at = e
-    while at:
+    while at != s:
         path.append(at)
         at = p[at]
+    path.append(s)
     path.reverse()
-    # If s and e are connected return the path
-    if path[0] == s:
-        return path
-    return []
+    return path
 
 def solve(at: int):
     queue = deque([at])
-    visited = set()
-    p = [None]*n
 
     while queue:
         v = queue.popleft()
@@ -150,12 +147,6 @@ def solve(at: int):
     return p
 
 def bfs(s: int, e: int):
-    """Return reconstructed path from s->e.
-
-    s = start
-    e = end
-    p = previous
-   """
     p = solve(s)
     return reconstructPath(s, e, p)
 ```
@@ -172,7 +163,6 @@ reached_end = False
 nodes_left_in_layer = 0
 nodes_in_edge_layer = 0
 move_count = 0
-queue = deque([s])
 visited = set()
 
 def explore_neighbours(v: tuple[int,int]):
@@ -193,6 +183,7 @@ def explore_neighbours(v: tuple[int,int]):
         nodes_in_edge_layer += 1
 
 def solve(s: tuple[int,int], e: tuple[int,int]):
+    queue = deque([s])
     while queue:
         v = queue.popleft()
         visited.add(v)
@@ -232,22 +223,22 @@ from collections import deque
 
 adj = [] # Adjacency list representing graph
 n = len(adj) # Number of nodes in the graph
+p = [-1]*n # predecessors
+queue = deque([s])
+visited = [False]*n
 
 def reconstructPath(s: int, e: int, p: list[int]):
     path = []
     at = e
-    while at:
+    while at != s:
         path.append(at)
         at = p[at]
-
+    path.append(s)
     path.reverse()
 
-    # If s and e are connected return the path
-    if path[0] == s:
-        return path
-    return []
+    return path
 
-def solve(queue: deque, visited: list[Bool], p: list[int]):
+def solve(visited: list[Bool], p: list[int]):
     if not queue:
         return
 
@@ -260,13 +251,8 @@ def solve(queue: deque, visited: list[Bool], p: list[int]):
             p[edge] = v
 
 def bfs(s: int, e: int):
-    queue = deque([s])
-    visited = [False]*n
-    p = [None]*n # predecessors
-
-    solve(queue, visited, p) # Do a BFS starting at v s
-
-    return reconstructPath(s, e, p) # return reconstructed path from s->e
+    solve(queue, visited, p) 
+    return reconstructPath(s, e, p)
 
 ```
 
@@ -852,7 +838,6 @@ if __name__ == "__main__":
 ```Python
 
 def strongly_connected_components(graph):
-
     index_counter = [0]
     stack = []
     lowlinks = {}
@@ -860,27 +845,22 @@ def strongly_connected_components(graph):
     result = []
     
     def strongconnect(node):
-        # set the depth index for this node to the smallest unused index
         index[node] = index_counter[0]
         lowlinks[node] = index_counter[0]
         index_counter[0] += 1
         stack.append(node)
     
-        # Consider successors of `node`
         try:
             successors = graph[node]
         except:
             successors = []
         for successor in successors:
             if successor not in lowlinks:
-                # Successor has not yet been visited; recurse on it
                 strongconnect(successor)
                 lowlinks[node] = min(lowlinks[node],lowlinks[successor])
             elif successor in stack:
-                # the successor is in the stack and hence in the current strongly connected component (SCC)
                 lowlinks[node] = min(lowlinks[node],index[successor])
         
-        # If `node` is a root node, pop the stack and generate an SCC
         if lowlinks[node] == index[node]:
             connected_component = []
             
@@ -899,7 +879,46 @@ def strongly_connected_components(graph):
     return result
 ```
 
+### Connected Components Algorithm
 
+```Python
+from typing import List
+
+def dfs(v: int, adj: List[List[int]], used: List[bool], comp: List[int]) -> None:
+    stack = [v]
+    
+    while stack:
+        curr = stack.pop()
+        if not used[curr]:
+            used[curr] = True
+            comp.append(curr)
+            for neighbor in reversed(adj[curr]):
+                stack.append(neighbor)
+
+def find_comps(n: int, adj: List[List[int]]) -> None:
+    used = [False] * n
+    for v in range(n):
+        if not used[v]:
+            comp = []
+            dfs(v, adj, used, comp)
+            print("Component:", ' '.join(map(str, comp)))
+
+def test_find_comps():
+    n = 5
+    adj = [
+        [1, 2],    # edges from vertex 0
+        [0, 3],    # edges from vertex 1
+        [0],       # edges from vertex 2
+        [1, 4],    # edges from vertex 3
+        [3]        # edges from vertex 4
+    ]
+    find_comps(n, adj)
+
+if __name__ == "__main__":
+    test_find_comps()
+```
+
+    
 #### Adjacency Matrix
 
 [Source code](https://github.com/williamfiset/Algorithms/blob/master/src/main/java/com/williamfiset/algorithms/graphtheory/TarjanAdjacencyMatrix.java).
