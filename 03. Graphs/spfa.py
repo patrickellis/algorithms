@@ -2,16 +2,16 @@ from collections import deque
 from typing import List, Tuple, Optional
 
 INF = float('inf')
+n = len(adj)
+dist = [INF] * n
+cnt = [0] * n
+inqueue = [False] * n
+p = [-1] * n  # predecessor list to reconstruct paths
 
 def spfa(s: int, adj: List[List[Tuple[int, int]]]) -> Tuple[bool, List[int], Optional[List[int]]]:
-    n = len(adj)
-    dist = [INF] * n
-    cnt = [0] * n
-    inqueue = [False] * n
-    p = [-1] * n  # predecessor list to reconstruct paths
+    dist[s] = 0
     q = deque()
 
-    dist[s] = 0
     q.append(s)
     inqueue[s] = True
 
@@ -35,14 +35,12 @@ def spfa(s: int, adj: List[List[Tuple[int, int]]]) -> Tuple[bool, List[int], Opt
 def reconstructPath(s: int, e: int, p: list[int]):
     path = []
     at = e
-    while at:
+    while at != s:
         path.append(at)
         at = p[at]
+    path.append(s)
     path.reverse()
-    # If s and e are connected return the path
-    if path[0] == s:
-        return path
-    return []
+    return path
 
 def test_spfa():
     adj = [
