@@ -9,9 +9,8 @@ adj = [
     [(5, 10)],            # edge creating a negative cycle
     [(3, 1)],              # edge creating a negative cycle
 ]
-INF = float('inf')
 n = len(adj)
-dist = [INF] * n
+dist = [float('inf')] * n
 cnt = [0] * n
 inqueue = [False] * n
 p = [-1] * n  # predecessor list to reconstruct paths
@@ -19,7 +18,6 @@ p = [-1] * n  # predecessor list to reconstruct paths
 def spfa(s: int, adj: List[List[Tuple[int, int]]]) -> Tuple[bool, List[int], Optional[List[int]]]:
     dist[s] = 0
     queue = deque()
-
     queue.append(s)
     inqueue[s] = True
 

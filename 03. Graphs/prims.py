@@ -4,22 +4,19 @@ import sys
 
 def prim(adj: List[List[Tuple[int,int]]]) -> None:
     n = len(adj)
-    p = [-1]*n
     pq = [(0,0)]
     total_weight = 0
     visited = [False]*n
 
-    for _ in range(n):
-        weight, v = heapq.heappop(pq)
+    while pq:
+        w, v = heapq.heappop(pq)
         if visited[v]:
             continue
         visited[v] = True
-        total_weight += weight
+        total_weight += w
 
         for to,weight in adj[v]:
-            if not visited[to]:
-                p[to] = v
-                heapq.heappush(pq,(weight,to))
+            heapq.heappush(pq,(weight,to))
 
     return total_weight
 
