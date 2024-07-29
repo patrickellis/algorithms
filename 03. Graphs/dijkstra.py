@@ -22,7 +22,7 @@ def dijkstra(s):
         visited[v] = True
 
         for to, weight in adj[v]:
-            if dist[v] + weight < dist[to]:
+            if not visited[to] and dist[v] + weight < dist[to]:
                 dist[to] = dist[v] + weight
                 p[to] = v
                 heapq.heappush(pq, (dist[to], to))

@@ -1,0 +1,42 @@
+import heapq
+from typing import List, Tuple
+
+INF = float('inf')
+
+class Edge:
+    def __init__(self, weight: int = INF, to: int = -1):
+        self.weight = weight
+        self.to = to
+
+    def __lt__(self, other: 'Edge') -> bool:
+        return (self.weight, self.to) < (other.weight, other.to)
+
+def prim(adj: List[List[Edge]]) -> None:
+    n = len(adj)
+    total_weight = 0
+    min_e = [Edge() for _ in range(n)]
+    min_e[0].weight = 0
+    pq = []
+    heapq.heappush(q, (0,0)
+    visited = [False] * n
+
+    for _ in range(n):
+        if not pq:
+            print("No MST!")
+            return
+
+        edge = heapq.heappop(pq)
+        v = edge.to
+
+        visited[v] = True
+        total_weight += edge.weight
+
+        if min_e[v].to != -1:
+            print(f"{v} {min_e[v].to}")
+
+        for e in adj[v]:
+            if not visited[e.to] and e.weight < min_e[e.to].weight:
+                min_e[e.to] = Edge(e.weight, v)
+                heapq.heappush(pq, Edge(e.weight, e.to))
+
+    print(total_weight)

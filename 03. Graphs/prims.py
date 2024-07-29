@@ -1,49 +1,38 @@
 from typing import List, Tuple
+import heapq
 import sys
 
-INF = float('inf')
-
-class Edge:
-    def __init__(self, weight: int = INF, to: int = -1):
-        self.weight = weight
-        self.to = to
-
-def prim(n: int, adj: List[List[int]]) -> None:
+def prim(adj: List[List[Tuple[int,int]]]) -> None:
+    n = len(adj)
+    p = [-1]*n
+    pq = [(0,0)]
     total_weight = 0
-    selected = [False] * n
-    min_e = [Edge() for _ in range(n)]
-    min_e[0].weight = 0
+    visited = [False]*n
 
     for _ in range(n):
-        v = -1
-        for j in range(n):
-            if not selected[j] and (v == -1 or min_e[j].weight < min_e[v].weight):
-                v = j
+        weight, v = heapq.heappop(pq)
+        if visited[v]:
+            continue
+        visited[v] = True
+        total_weight += weight
 
-        if min_e[v].weight == INF:
-            print("No MST!")
-            return
+        for to,weight in adj[v]:
+            if not visited[to]:
+                p[to] = v
+                heapq.heappush(pq,(weight,to))
 
-        selected[v] = True
-        total_weight += min_e[v].weight
-        if min_e[v].to != -1:
-            print(f"{v} {min_e[v].to}")
-
-        for to in range(n):
-            if adj[v][to] < min_e[to].weight:
-                min_e[to] = Edge(adj[v][to], v)
-
-    print(total_weight)
+    return total_weight
 
 def test_prim():
-    n = 4
     adj = [
-        [0, 1, 4, INF],
-        [1, 0, 2, 6],
-        [4, 2, 0, 3],
-        [INF, 6, 3, 0]
+        [(1, 2), (3, 6)],
+        [(0, 2), (2, 3), (3, 8), (4, 5)],
+        [(1, 3), (4, 7)],
+        [(0, 6), (1, 8)],
+        [(1, 5), (2, 7)]
     ]
-    prim(n, adj)
+    weight = prim(adj)
+    print(f"MST weight: {weight}")
 
 if __name__ == "__main__":
     test_prim()
