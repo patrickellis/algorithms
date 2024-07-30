@@ -3,16 +3,16 @@
    (NOTE: This is the same as in DFS Topological Sort, but be aware
    the graphs may be cyclic).
 2. Create the transpose of G.
-3. Iterate through the order of vertices on the stack and perform DFS on each.
+3. Iterate through the stack of vertices on the stack and perform DFS on each.
    Collect the vertices visited in each DFS as an SCC.
 """
 from typing import List
 
 def kosaraju(adj: List[List[int]]) -> List[List[int]]:
-    n = len(adj)
-    visited = [False] * n
-    order = []
     components = []
+    n = len(adj)
+    stack = []
+    visited = [False]*n
 
     def dfs(v: int, adj: List[List[int]], visited: List[bool], output: List[int]):
         visited[v] = True
@@ -21,23 +21,27 @@ def kosaraju(adj: List[List[int]]) -> List[List[int]]:
                 dfs(edge, adj, visited, output)
         output.append(v)
 
+    def transpose_graph(adj: List[List[int]]) -> List[List[int]]:
+        adj_transpose = [[] for _ in range(n)]
+
+        for v in range(n):
+            for edge in adj[v]:
+                adj_transpose[edge].append(v)
+
+        return adj_transpose
+
     for i in range(n):
         if not visited[i]:
-            dfs(i, adj, visited, order)
+            dfs(i, adj, visited, stack)
+    stack.reverse()
 
-    adj_transpose = [[] for _ in range(n)]
-    for v in range(n):
-        for edge in adj[v]:
-            adj_transpose[edge].append(v)
-
-    visited = [False] * n
-    order.reverse()
-
-    for v in order:
+    adj_transpose = transpose_graph(adj)
+    visited = [False]*n
+    for v in stack:
         if not visited[v]:
             component = []
             dfs(v, adj_transpose, visited, component)
-            components.append(sorted(component))
+            components.append(component)
 
     return components
 
@@ -52,3 +56,4 @@ adjacency_list = [
 
 components = kosaraju(adjacency_list)
 print("Strongly connected components:", components)
+
