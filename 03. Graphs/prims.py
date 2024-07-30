@@ -2,8 +2,10 @@ from typing import List, Tuple
 import heapq
 import sys
 
-def prim(adj: List[List[Tuple[int,int]]]) -> None:
-    n = len(adj)
+adj = []
+n = len(adj)
+
+def prim() -> None:
     pq = [(0,0)]
     total_weight = 0
     visited = [False]*n
