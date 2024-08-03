@@ -8,11 +8,12 @@
 """
 from typing import List
 
+
 def kosaraju(adj: List[List[int]]) -> List[List[int]]:
     components = []
     n = len(adj)
     stack = []
-    visited = [False]*n
+    visited = [False] * n
 
     def dfs(v: int, adj: List[List[int]], visited: List[bool], output: List[int]):
         visited[v] = True
@@ -36,7 +37,7 @@ def kosaraju(adj: List[List[int]]) -> List[List[int]]:
     stack.reverse()
 
     adj_transpose = transpose_graph(adj)
-    visited = [False]*n
+    visited = [False] * n
     for v in stack:
         if not visited[v]:
             component = []
@@ -45,15 +46,15 @@ def kosaraju(adj: List[List[int]]) -> List[List[int]]:
 
     return components
 
+
 adjacency_list = [
-    [1],        # 0 -> 1
-    [2],        # 1 -> 2
-    [0, 3],     # 2 -> 0, 2 -> 3
-    [4],        # 3 -> 4
-    [5],        # 4 -> 5
-    [3],        # 5 -> 3
+    [1],  # 0 -> 1
+    [2],  # 1 -> 2
+    [0, 3],  # 2 -> 0, 2 -> 3
+    [4],  # 3 -> 4
+    [5],  # 4 -> 5
+    [3],  # 5 -> 3
 ]
 
 components = kosaraju(adjacency_list)
 print("Strongly connected components:", components)
-

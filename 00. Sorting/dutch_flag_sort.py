@@ -18,6 +18,7 @@ This algorithm can be implemented only on a A that contains three unique element
 More info on: https://en.wikipedia.org/wiki/Dutch_national_flag_problem
 """
 
+
 def dutch_national_flag(A: list, pivot: int):
     low, mid = 0, 0
     high = len(A) - 1

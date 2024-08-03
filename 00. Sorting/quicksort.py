@@ -21,7 +21,8 @@ def quicksort(A: list, left: int, right: int) -> None:
     quicksort(A, left, low - 1)
     quicksort(A, high + 1, right)
 
+
 A = [3, 5, 8, 4, 1, 9, -2]
 print(f"Original: {A}")
-quicksort(A,0,len(A)-1)
+quicksort(A, 0, len(A) - 1)
 print(f"Sorted: {A}")

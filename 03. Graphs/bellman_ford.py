@@ -2,11 +2,13 @@ from typing import List, Tuple
 
 INF = 10**9
 
+
 class Edge:
     def __init__(self, src: int, dst: int, weight: int):
         self.src = src
         self.dst = dst
         self.weight = weight
+
 
 def bellman_ford(n: int, edges: List[Edge], v: int) -> None:
     dist = [INF] * n
@@ -43,16 +45,13 @@ def bellman_ford(n: int, edges: List[Edge], v: int) -> None:
             print(u, end=" ")
         print()
 
+
 def test_bellman_ford():
-    edges = [
-        Edge(0, 1, 1),
-        Edge(1, 2, 1),
-        Edge(2, 3, -3),
-        Edge(3, 1, 1)
-    ]
+    edges = [Edge(0, 1, 1), Edge(1, 2, 1), Edge(2, 3, -3), Edge(3, 1, 1)]
     n = 4
     source = 0
     bellman_ford(n, edges, source)
+
 
 if __name__ == "__main__":
     test_bellman_ford()
