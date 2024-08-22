@@ -6,11 +6,11 @@ sort a A of n size with [0 <= a[i] <= 2] at guaranteed O(n) complexity in a
 single pass.
 
 The flag of the Netherlands consists of three colors: white, red, and blue.
-The task is to randomly Aange balls of white, red, and blue in such a way that balls
-of the same color are placed together.  DNF sorts a A of 0, 1, and 2's in linear
+The task is to randomly arrange balls of white, red, and blue in such a way that balls
+of the same color are placed together.  DNF sorts an array of 0, 1, and 2's in linear
 time that does not consume any extra space.
 
-This algorithm can be implemented only on a A that contains three unique elements.
+This algorithm can be implemented only on an array that contains three unique elements.
 
 1) Time complexity is O(n).
 2) Space complexity is O(1).

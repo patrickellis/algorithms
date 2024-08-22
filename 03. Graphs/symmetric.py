@@ -1,13 +1,14 @@
 def isSymmetric(root):
     if not root:
         return True
-    return self.isSame(root.left, root.right)
+    return isSame(root.left, root.right)
 
-def isSame(l_root, r_root):
-    if l_root == None and r_root == None:
+
+def isSame(left, right):
+    if left is None and right is None:
         return True
-    if l_root == None or r_root == None:
+    if left is None or right is None:
         return False
-    if l_root.val != r_root.val:
+    if left.val != right.val:
         return False
-    return self.isSame(l_root.left, r_root.right) and self.isSame(l_root.right, r_root.left)
+    return isSame(left.left, right.right) and isSame(left.right, right.left)

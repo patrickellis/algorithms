@@ -66,5 +66,5 @@ res = bfs((0, 0), (2, 0))
 for i in range(N):
     print(" ".join(map(str, m[i])))
 
-print(f"")
+print("")
 print(f"Moves: {res}")

@@ -1,6 +1,4 @@
-from typing import List, Tuple
 import heapq
-import sys
 
 adj = []
 n = len(adj)

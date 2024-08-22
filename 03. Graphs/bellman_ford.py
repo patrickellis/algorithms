@@ -1,4 +1,4 @@
-from typing import List, Tuple
+from typing import List
 
 INF = 10**9
 
