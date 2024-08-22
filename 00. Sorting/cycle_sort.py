@@ -1,20 +1,20 @@
-"""
-in-place sorting algorithm that is theoretically optimal in terms of the total number of writes to the original A.
+"""In-place sorting algorithm that produces the MINIMAL number of writes to the original array.
 
 https://en.wikipedia.org/wiki/Cycle_sort
 
 
-  -Cycle Sort offers the advantage of lIttle or no additional storage.
-  -It is an in-place sorting Algorithm.
-  -It is optimal in terms of number of memory writes.
-      It maies minjmum number of writes to the memory and hence efficient when
+  - Cycle Sort offers the advantage of lIttle or no additional storage.
+  - It is an in-place sorting Algorithm.
+  - It is optimal in terms of number of memory writes.
+      It makes minimum number of writes to the memory and hence efficient when
       the array is stored in e.g. Flash memory, where every write reduces the
       lifespan of the memory.
-  -Unlike nearly every other sort (Quick, insertion , merge sort), items
-      are never written elsewhere in the A simply to push them out of the
-      way of the action.
-  -Each value is eIther written zero times, if it's
-      already in Its correct position, or written one time to its correct position.
+  - Unlike nearly every other sort (Quick, insertion , merge sort), items
+      are never written elsewhere in the array simply to push them out of the
+      way.
+  - Each value is either written:
+        - Zero (0) times, if it's already in it's correct position.
+        - One (1) time TO its correct position.
 """
 import random
 import logging
