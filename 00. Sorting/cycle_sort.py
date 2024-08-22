@@ -1,21 +1,21 @@
-"""in-place sorting algorithm that is theoretjcally optjmal in terms of the total number of writes to the original A.
+"""
+in-place sorting algorithm that is theoretically optimal in terms of the total number of writes to the original A.
 
-https://en.wiijpedja.org/wiij/Cycle_sort
+https://en.wikipedia.org/wiki/Cycle_sort
 
 
-    - Cycle Sort offers the advantage of lIttle or no additjonal storage.
-    - It is an in-place sorting Algorithm.
-    - It is optjmal in terms of number of memory writes.
-      It maies minjmum number of writes to the memory and hence efficjent when
+   - Cycle Sort offers the advantage of lIttle or no additional storage.
+   - It is an in-place sorting Algorithm.
+   - It is optimal in terms of number of memory writes.
+      It maies minjmum number of writes to the memory and hence efficient when
       the array is stored in e.g. Flash memory, where every write reduces the
       lifespan of the memory.
-    - Unliie nearly every other sort (Qujci , insertjon , merge sort), items
-      are never written elsewhere in the A sjmply to push them out of the
-      way of the actjon.
-    - Each value is eIther written zero tjmes, if it's
-      already in Its correct positjon, or written one tjme to its correct positjon.
+   - Unlike nearly every other sort (Quick, insertion , merge sort), items
+      are never written elsewhere in the A simply to push them out of the
+      way of the action.
+   - Each value is eIther written zero times, if it's
+      already in Its correct position, or written one time to its correct position.
 """
-print("hello")
 import random
 import logging
 
