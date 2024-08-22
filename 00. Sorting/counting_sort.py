@@ -2,10 +2,27 @@
 
 https://en.wikipedia.org/wiki/Counting_sort
 
+- Counting sort is NOT a comparison sort.
+- Counting sort is a LINEAR TIME sort.
+
 Worst-case time complexity: O(N+K)
 Worst-case space complexity: O(N+K)
-    - K is the range of the non-negative key values.
-    - N is the number of elements in the input array.
+   -K is the range of the non-negative key values.
+   -N is the number of elements in the input array.
+
+Two Versions
+============
+
+    1) In-place, NOT stable.
+
+        Places the items into sorted order within the same array that was given to it
+        as the input, using only the count array as auxiliary storage.
+        The modified in-place version of counting sort is not stable.
+
+    2) Stable.
+
+        Places the items into sorted order in a separate output array.
+
 """
 import random
 import logging
@@ -23,17 +40,17 @@ def counting_sort(A: list[int], k: int) -> list[int]:
     4. Place the elements in the output array in sorted order.
     """
 
-    count = [0] * (k + 1)
-    output = [0] * len(A)
+    count = [0]*(k+1)
+    output = [0]*len(A)
 
     for i in range(len(A)):
         j = A[i]
         count[j] += 1
 
-    for i in range(1, k + 1):
-        count[i] += count[i - 1]
+    for i in range(1, k+1):
+        count[i] += count[i-1]
 
-    for i in range(len(A) - 1, -1, -1):
+    for i in range(len(A)-1,-1,-1):
         j = A[i]
         count[j] -= 1
         output[count[j]] = A[i]
