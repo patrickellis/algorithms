@@ -44,16 +44,14 @@ def counting_sort(A: list[int], k: int) -> list[int]:
     output = [0]*n
 
     for i in range(n):
-        j = A[i]
-        count[j] += 1
+        count[A[i]] += 1
 
     for i in range(1, k+1):
         count[i] += count[i-1]
 
     for i in range(n-1,-1,-1):
-        j = A[i]
-        count[j] -= 1
-        output[count[j]] = A[i]
+        count[A[i]] -= 1
+        output[count[A[i]]] = A[i]
 
     return output
 

@@ -26,13 +26,22 @@ logging.basicConfig(level=logging.INFO)
 def cycle_sort(A: list[int]) -> None:
     """Sorts an array in place.
 
-    1. Loop through each item in the array to find cycles to rotate.
-    2. In each iteration, select an item from the array and count the number
-       of items that are less than it.
-    3. Place the item right after duplicates, if any.
-    4. The item has been placed in the correct position when `pos` is equal to `i`.
-        Until then, repeat the process of counting the number of items less than
-        the current item, and placing it right after duplicates.
+    For each item `x` in the array:
+
+        1. Count the number of items that are less than it. This is the
+           final index of the item in the sorted array.
+        2. If the element is already in the correct position, continue.
+        3. Otherwise, write it to its correct position.
+           That position is inhabited by another element, which we then have to
+           move to _its_ correct position.
+        4. We keep moving elements to their correct positions until an element is moved to the original position of `x`.
+           This completes a cycle.
+
+    The item has been placed in the correct position when `pos` is equal to `i`.
+    Until then, repeat the process of counting the number of items less than
+    the current item, and placing it right after duplicates.
+
+    N.B. Items are placed right after duplicates, if any.
     """
     n = len(A)
 

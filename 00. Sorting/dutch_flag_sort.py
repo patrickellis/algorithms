@@ -28,11 +28,11 @@ def dutch_national_flag(A: list, pivot: int):
             A[low], A[mid] = A[mid], A[low]
             low += 1
             mid += 1
-        elif A[mid] == pivot:
-            mid += 1
-        else:
+        elif A[mid] > pivot:
             A[high], A[mid] = A[mid], A[high]
             high -= 1
+        else:
+            mid += 1
     return A
 
 
