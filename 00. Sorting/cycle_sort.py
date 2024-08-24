@@ -22,7 +22,6 @@ import logging
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
 
-
 def cycle_sort(A: list[int]) -> None:
     """Sorts an array in place.
 
@@ -45,10 +44,10 @@ def cycle_sort(A: list[int]) -> None:
     """
     n = len(A)
 
-    for i in range(0, n-1):
+    for i in range(n-1):
         item = A[i]
-
         pos = i
+
         for j in range(i+1, n):
             if A[j] < item:
                 pos += 1
@@ -66,7 +65,6 @@ def cycle_sort(A: list[int]) -> None:
             for j in range(i+1, n):
                 if A[j] < item:
                     pos += 1
-
             while item == A[pos]:
                 pos += 1
             A[pos], item = item, A[pos]
