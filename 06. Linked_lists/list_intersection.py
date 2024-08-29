@@ -46,3 +46,21 @@ class Solution:
             q = q.next if q else p_head
 
         return p
+
+if __name__ == "__main__":
+    # Test case 1
+    # Intersection at 8
+    p = Node(4)
+    p.next = Node(1)
+    p.next.next = Node(8)
+    p.next.next.next = Node(4)
+    p.next.next.next.next = Node(5)
+    q = Node(5)
+    q.next = Node(6)
+    q.next.next = Node(1)
+    q.next.next.next = p.next.next
+    q.next.next.next.next = Node(9)
+    if Solution().getIntersectionNode_concise(p, q).val == 8:
+        print("Test case 1 passed.")
+    else:
+        print("Test case 1 failed.")

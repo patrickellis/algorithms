@@ -52,20 +52,20 @@ def cycle_sort(A: list[int]) -> None:
             if A[j] < item:
                 pos += 1
 
-        if pos == i:
+        if i == pos:
             continue
 
-        while item == A[pos]:
+        while A[pos] == item:
             pos += 1
 
         A[pos], item = item, A[pos]
 
-        while pos != i:
+        while i != pos:
             pos = i
             for j in range(i+1, n):
                 if A[j] < item:
                     pos += 1
-            while item == A[pos]:
+            while A[pos] == item:
                 pos += 1
             A[pos], item = item, A[pos]
 

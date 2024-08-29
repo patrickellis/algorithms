@@ -26,14 +26,14 @@ class BinaryHeap:
             self.max_heapify(i)
 
     def insert(self, val: int) -> None:
+        index = len(self.heap)
+        parent = (index-1)//2
         self.heap.append(val)
-        index = len(self.heap) - 1
-        parent = (index - 1) // 2
 
-        while index > 0 and self.heap[parent] < self.heap[index]:
+        while index > 0 and self.heap[index] > self.heap[parent]:
             self.heap[parent], self.heap[index] = self.heap[index], self.heap[parent]
             index = parent
-            parent = (index - 1) // 2
+            parent = (index-1)//2
 
     def extract_max(self) -> int:
         if len(self.heap) < 1:

@@ -49,7 +49,7 @@ def counting_sort(A: list[int], k: int) -> list[int]:
     for i in range(1, k+1):
         count[i] += count[i-1]
 
-    for i in range(n-1,-1,-1):
+    for i in range(n):
         count[A[i]] -= 1
         output[count[A[i]]] = A[i]
 
