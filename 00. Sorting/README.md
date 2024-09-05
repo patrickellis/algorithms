@@ -79,7 +79,7 @@ def insertion_sort(A: list[int]):
 ```Python
 def selection_sort(A: list[int]):
     n = len(A)
-    for i in range(n):
+    for i in range(n-1):
         jMin = i
         for j in range(i+1,n):
             if A[j] < A[jMin]:
