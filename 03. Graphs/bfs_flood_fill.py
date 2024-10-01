@@ -1,9 +1,12 @@
 from collections import deque
 from typing import List, Tuple
 
-def flood_fill(m: List[List[int]], start: Tuple[int, int], color: int) -> List[List[int]]:
+
+def flood_fill(
+    m: List[List[int]], start: Tuple[int, int], color: int
+) -> List[List[int]]:
     R, C = len(m), len(m[0])
-    directions = ((0, 1),(0, -1),(1, 0),(-1, 0))
+    directions = ((0, 1), (0, -1), (1, 0), (-1, 0))
     queue = deque()
     visited = set()
     original_value = m[start[0]][start[1]]
@@ -39,13 +42,14 @@ def flood_fill(m: List[List[int]], start: Tuple[int, int], color: int) -> List[L
 
     return m
 
+
 # Example usage
 matrix = [
     [1, 1, 1, 2, 2],
     [1, 1, 0, 2, 2],
     [1, 0, 0, 2, 2],
     [0, 0, 2, 2, 2],
-    [1, 2, 2, 2, 2]
+    [1, 2, 2, 2, 2],
 ]
 
 start = (1, 2)

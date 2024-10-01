@@ -27,13 +27,13 @@ class BinaryHeap:
 
     def insert(self, val: int) -> None:
         index = len(self.heap)
-        parent = (index-1)//2
+        parent = (index - 1) // 2
         self.heap.append(val)
 
         while index > 0 and self.heap[index] > self.heap[parent]:
             self.heap[parent], self.heap[index] = self.heap[index], self.heap[parent]
             index = parent
-            parent = (index-1)//2
+            parent = (index - 1) // 2
 
     def extract_max(self) -> int:
         if len(self.heap) < 1:

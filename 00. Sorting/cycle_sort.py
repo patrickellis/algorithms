@@ -18,9 +18,11 @@ https://en.wikipedia.org/wiki/Cycle_sort
 """
 import random
 import logging
+from itertools import pairwise
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
+
 
 def cycle_sort(A: list[int]) -> None:
     """Sorts an array in place.
@@ -44,11 +46,11 @@ def cycle_sort(A: list[int]) -> None:
     """
     n = len(A)
 
-    for i in range(n-1):
+    for i in range(n - 1):
         item = A[i]
         pos = i
 
-        for j in range(i+1, n):
+        for j in range(i + 1, n):
             if A[j] < item:
                 pos += 1
 
@@ -62,16 +64,18 @@ def cycle_sort(A: list[int]) -> None:
 
         while i != pos:
             pos = i
-            for j in range(i+1, n):
+            for j in range(i + 1, n):
                 if A[j] < item:
                     pos += 1
-            while A[pos] == item:
+            while item == A[pos]:
                 pos += 1
             A[pos], item = item, A[pos]
 
 
 if __name__ == "__main__":
-    A = [random.randint(1, 100) for _ in range(15)]
-    logger.info("Original Array: %s", A)
+    A = [random.randint(1, 100) for _ in range(10000)]
+    # logger.info("Original Array: %s", A)
     cycle_sort(A)
-    logger.info("Sorted Array: %s", A)
+    # logger.info("Sorted Array: %s", A)
+    if all(a <= b for a, b in pairwise(A)):
+        logger.info("Cycle Sort: Passed")

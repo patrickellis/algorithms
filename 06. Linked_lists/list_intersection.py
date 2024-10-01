@@ -47,6 +47,7 @@ class Solution:
 
         return p
 
+
 if __name__ == "__main__":
     # Test case 1
     # Intersection at 8

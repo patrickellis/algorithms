@@ -40,14 +40,14 @@ def counting_sort(A: list[int], k: int) -> list[int]:
     4. Place the elements in the output array in sorted order.
     """
     n = len(A)
-    count = [0]*(k+1)
-    output = [0]*n
+    count = [0] * (k + 1)
+    output = [0] * n
 
     for i in range(n):
         count[A[i]] += 1
 
-    for i in range(1, k+1):
-        count[i] += count[i-1]
+    for i in range(1, k + 1):
+        count[i] += count[i - 1]
 
     for i in range(n):
         count[A[i]] -= 1

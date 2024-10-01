@@ -1,4 +1,3 @@
-
 class Solution:
     def fill(self, image, sr, sc, color, cur):
         R, C = len(image), len(image[0])
@@ -11,7 +10,7 @@ class Solution:
 
         for d in directions:
             if sr < 0 or sr >= R or sc < 0 or sc >= C or cur != image[sr][sc]:
-                self.fill(image, sr+d[0], sc+d[1], color, cur)
+                self.fill(image, sr + d[0], sc + d[1], color, cur)
 
     def floodFill(self, image, sr, sc, color):
         if image[sr][sc] == color:

@@ -1,9 +1,9 @@
-
 import random
 import logging
 
 logger = logging.getLogger(__name__)
 logging.basicConfig(level=logging.INFO)
+
 
 def mergeSort(A):
     if len(A) <= 1:
@@ -33,6 +33,7 @@ def mergeSort(A):
         A[k] = R[j]
         j += 1
         k += 1
+
 
 if __name__ == "__main__":
     UPPER_LIM = 100
