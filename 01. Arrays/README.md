@@ -50,7 +50,7 @@ There are two functions to know:
 
 ```Python
 def hasCycle(listNode head):
-"""Returns True if the Linked List contains a cycle, else False."""
+    """Returns True if the Linked List contains a cycle, else False."""
     slow = head
     fast = head
     while fast and fast.next:
@@ -61,7 +61,7 @@ def hasCycle(listNode head):
     return False
 
 def getCycle(listNode head) -> int:
-"""Returns the starting point of a cycle in a Linked list."""
+    """Returns the starting point of a cycle in a Linked list."""
     slow = head
     fast = head
     while fast and fast.next:
@@ -89,7 +89,7 @@ def getCycle(listNode head) -> int:
 ```Python
 def findDuplicate(A: list[int]) -> int:
     def hasCycle():
-    """Returns true when a cycle is found."""
+        """Returns true when a cycle is found."""
         slow = A[0]
         fast = A[0]
         while True:
@@ -118,16 +118,16 @@ def findDuplicate(A: list[int]) -> int:
 
 ```Python
 def compress(chars: list[str]) -> int:
-"""Given an array of characters, compress it.
+    """Given an array of characters, compress it.
 
-The algorithm used is:
+    The algorithm used is:
 
     Begin with an empty string s.
     For each group of consecutive repeating characters in chars:
 
     If the group's length is 1, append the character to s.
     Otherwise, append the character followed by the group's length.
-"""
+    """
     i, j, n = 0, 0, len(chars)
 
     while i < n:
@@ -179,7 +179,7 @@ def reverseString(self, s: list[str]) -> None:
 
 ```Python
 def isPalindrome(self, s: str) -> bool:
-"""Returns True if string 's' is a Palindrome, else False."""
+    """Returns True if string 's' is a Palindrome, else False."""
     s = s.lower()
     l, r = 0, len(s) - 1
 
@@ -235,7 +235,7 @@ def nextPermutation(A: list[int]) -> None:
 
 ```Python
 def twoSum(self, A: list[int], target: int) -> list[int]:
-"""Calculates two sum result for a sorted input."""
+    """Calculates two sum result for a sorted input."""
     l, r = 0, len(A) - 1
 
     while l < r:
@@ -254,14 +254,14 @@ def twoSum(self, A: list[int], target: int) -> list[int]:
 
 ```Python
 def nsum(A: list[int], N: int, results: list[list[int]], result: list[int], target: int):
-"""Generalized function that calculates solutions for n-Sum.
+    """Generalized function that calculates solutions for n-Sum.
 
-Usage:
+    Usage:
 
-    results = []
-    target = 11
-    nsum(A, 4, results, [], target)
-"""
+        results = []
+        target = 11
+        nsum(A, 4, results, [], target)
+    """
     if A[0] * N > target or A[-1] * N < target:
         return
 
@@ -298,7 +298,7 @@ Usage:
 ```Python
 def findDuplicate(A: list[int]) -> int:
     def hasCycle():
-    """Returns true when a cycle is found."""
+        """Returns true when a cycle is found."""
         slow = A[0]
         fast = A[0]
         while True:
@@ -327,16 +327,16 @@ def findDuplicate(A: list[int]) -> int:
 
 ```Python
 def compress(chars: list[str]) -> int:
-"""Given an array of characters, compress it.
+    """Given an array of characters, compress it.
 
-The algorithm used is:
+    The algorithm used is:
 
-    Begin with an empty string s.
-    For each group of consecutive repeating characters in chars:
+        Begin with an empty string s.
+        For each group of consecutive repeating characters in chars:
 
-    If the group's length is 1, append the character to s.
-    Otherwise, append the character followed by the group's length.
-"""
+        If the group's length is 1, append the character to s.
+        Otherwise, append the character followed by the group's length.
+    """
     i, j, n = 0, 0, len(chars)
 
     while i < n:
@@ -377,13 +377,13 @@ def removeDuplicates(nums: list[int]) -> int:
 
 ```Python
 def merge(self, A: list[int], m: int, B: list[int], n: int) -> None:
-"""Merges two sorted arrays A and B.
+    """Merges two sorted arrays A and B.
 
-A has additional space to hold the additional elements from B.
+    A has additional space to hold the additional elements from B.
 
-m = len(A)
-n = len(B)
-"""
+    m = len(A)
+    n = len(B)
+    """
     k = m+n-1
     i = m-1
     j = n-1
@@ -463,7 +463,7 @@ def minWindow(s: str, t: str) -> str:
 
 ```Python
 def checkInclusion(self, s1: str, s2: str) -> bool:
-"""Returns True if a string s2 contains a permutation of s1, otherwise False."""
+    """Returns True if a string s2 contains a permutation of s1, otherwise False."""
     d = dict.fromkeys(s1, 0)
     for c in s1:
         d[c] += 1
